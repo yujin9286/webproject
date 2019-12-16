@@ -1,0 +1,28 @@
+extends ../layout
+
+include ../includes/_paginate
+
+block content
+  .container
+    form.form-inline.search-input-group(action='/questions', method='GET')
+      i.fa.fa-search
+      input.form-control.mr-sm-2(type='text', name='term', placeholder='검색', aria-label='Search', value=term)
+
+    h1.main-title 
+      | 상품 등록
+      if questions.total > 0
+        .small 총 #{questions.total} 상품
+
+    if questions.total <= 0 
+      .alert.alert-info 투어 상품이 아직 등록되지 않았습니다.
+    else
+      .questions
+        each question in questions.docs
+          .question
+            a.title(href=`/questions/${question.id}`)= question.title
+            include _question
+
+      +paginate(questions, '/questions', query)
+
+    hr
+    a.btn.btn-primary(href='/questions/new') 투어 상품 등록하기
